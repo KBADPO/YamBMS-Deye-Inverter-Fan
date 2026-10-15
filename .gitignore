@@ -15,6 +15,10 @@ YamBMS BLE.yaml
 # Local dashboards not included in repo
 Dashboard Overview.yaml
 
+# Local maintainer instructions
+MAINTAINER_GUIDE.md
+*MAINTAINER*.md
+
 # OS and Editor temporary files
 .DS_Store
 Thumbs.db
