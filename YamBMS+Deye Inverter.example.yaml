@@ -86,13 +86,13 @@ substitutions:
   # Bulk / Absorption Voltage : corresponds to the Bulk voltage that will be used to charge the battery. (LFP : 55.2V = 3.45V/Cell for 16S battery)
   yambms_bulk_v: '55.5'
   # Float Voltage : corresponds to the voltage at which the battery would be maintained at the end of charge. (LFP : 53.6V = 3.35V/Cell for 16S battery)
-  yambms_float_v: '54' # Піднято до 3.4V на комірку, щоб дозволити балансуванню працювати навіть у флоаті (якщо поріг балансира 3.4V)
+  yambms_float_v: '54' # Raised to 3.4V per cell to allow balancing to work even in float (if balancer threshold is 3.4V) / Піднято до 3.4V на комірку, щоб дозволити балансуванню працювати навіть у флоаті (якщо поріг балансира 3.4V)
   # Rebulk voltage, voltage from which a new Bulk charge can start. (LFP : 52.8V = 3.3V/Cell for 16S battery)
   yambms_rebulk_v: '53.0'
   # Maximum time in minutes that the cut-off step can last before charging is complete
   # If your cells are properly balanced this step ends at the fastest after the `cut-off timer`
   # This timer can be deactivated with a switch
-  yambms_eoc_timer: '90' # Збільшено з 30 до 120 хвилин, щоб дати більше часу на балансування
+  yambms_eoc_timer: '90' # Increased from 30 to 120 minutes to allow more time for balancing / Збільшено з 30 до 120 хвилин, щоб дати більше часу на балансування
   # Time in seconds during which the end of charge conditions must be respected (cut-off + cells not equalizing)
   yambms_cutoff_timer: '60'
   # Max. charge current : corresponds to the maximum charge current which may be requested by YamBMS.
@@ -174,16 +174,16 @@ substitutions:
 
 packages:
   pv_inverter:
-    # Оригінал: https://github.com/Lewa-Reka/esphome-deye-inverter
-    # Ваш форк: https://github.com/KBADPO/esphome-deye-inverter
+    # Original: https://github.com/Lewa-Reka/esphome-deye-inverter / Оригінал: https://github.com/Lewa-Reka/esphome-deye-inverter
+    # Your fork: https://github.com/KBADPO/esphome-deye-inverter / Ваш форк: https://github.com/KBADPO/esphome-deye-inverter
     url: https://github.com/KBADPO/esphome-deye-inverter
     ref: main
     refresh: 12h
     files: pv_inverter/deye_hybrid_1p_lv.yaml # SG0XLP1 Low Voltage (1P)
 
   remote_packages:
-    # Оригінал: https://github.com/Sleeper85/esphome-yambms
-    # Ваш форк: https://github.com/KBADPO/esphome-yambms
+    # Original: https://github.com/Sleeper85/esphome-yambms / Оригінал: https://github.com/Sleeper85/esphome-yambms
+    # Your fork: https://github.com/KBADPO/esphome-yambms / Ваш форк: https://github.com/KBADPO/esphome-yambms
     url: https://github.com/KBADPO/esphome-yambms
     ref: main
     refresh: 60min

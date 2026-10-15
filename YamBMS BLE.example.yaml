@@ -159,8 +159,8 @@ substitutions:
 
 packages:
   remote_packages:
-    # Оригінал: https://github.com/Sleeper85/esphome-yambms
-    # Якщо ви зробили форк у свій акаунт, вкажіть посилання на свій форк:
+    # Original: https://github.com/Sleeper85/esphome-yambms / Оригінал: https://github.com/Sleeper85/esphome-yambms
+    # If you made a fork in your account, specify your fork URL / Якщо ви зробили форк у свій акаунт, вкажіть посилання на свій форк:
     url: https://github.com/Sleeper85/esphome-yambms
     ref: main
     refresh: 60min
