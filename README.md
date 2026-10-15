@@ -111,6 +111,11 @@ esphome run "YamBMS+Deye Inverter.yaml"
 2. **Охолодження / Smart Fan**: Створіть необхідні помічники (helpers) та автоматизацію за інструкцією у файлі **[`ha_fan_config.md`](ha_fan_config.md)**.
 3. **Дашборд Lovelace**: Імпортуйте готовий дашборд сонячної станції з файлу **[`Dashboard Solar Station.yaml`](Dashboard%20Solar%20Station.yaml)**.
 
+> 📖 **UA: Потрібен інший інвертор (Victron, Growatt тощо), інша модель BMS або дротове підключення?**  
+> Читайте детальне керівництво з редагування конфігурацій та правил **гальванічної ізоляції** у файлі **[`inverter_bms_customization.md`](inverter_bms_customization.md)**.  
+> *📖 **EN: Need to adapt for a different inverter, BMS model, or wired connection?**  
+> Check our step-by-step customization and **galvanic isolation** guide in **[`inverter_bms_customization.md`](inverter_bms_customization.md)**.*
+
 ---
 
 ## 🎛️ Зведення помічників кулера / Fan Control Helpers Summary
@@ -150,6 +155,7 @@ esphome run "YamBMS+Deye Inverter.yaml"
 ├── YamBMS+Deye Inverter.example.yaml     # Шаблон прошивки ESPHome (Deye + YamBMS + Fan)
 ├── YamBMS BLE.example.yaml               # Шаблон прошивки ESPHome для автономного режиму YamBMS BLE
 ├── pv-inverter.Deye-SG0XLP1.yaml         # Базовий пакет сенсорів і регістрів Deye
+├── inverter_bms_customization.md         # Гайд з адаптації під інші інвертори/BMS та гальванічної ізоляції
 ├── ha_fan_config.md                      # Інструкція з налаштування кулера в Home Assistant
 ├── Dashboard Solar Station.yaml          # Готовий дашборд станції (BMS, Deye, Fan)
 └── Dashboard Overview.yaml               # Альтернативний дашборд
