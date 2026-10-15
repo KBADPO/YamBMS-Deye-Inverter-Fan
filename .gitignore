@@ -19,6 +19,11 @@ Dashboard Overview.yaml
 MAINTAINER_GUIDE.md
 *MAINTAINER*.md
 
+# Local wiring diagrams kept only on local machine
+images/wiring_pinout_table.png
+*wiring_pinout_table*
+*входи-виходи*
+
 # OS and Editor temporary files
 .DS_Store
 Thumbs.db

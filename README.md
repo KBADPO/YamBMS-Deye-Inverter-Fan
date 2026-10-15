@@ -37,10 +37,6 @@
 
 **EN**: All communication lines between the ESP32-S3 controller and Deye inverter (CAN bus, Modbus RS485, and 12V/5V power) are routed through a **single standard 8-wire twisted-pair Ethernet cable (UTP Cat5e/Cat6)**!
 
-<p align="center">
-  <img src="images/wiring_pinout_table.png" alt="Схема підключення витої пари / Wiring Pinout Table" width="950"/>
-</p>
-
 ### 📋 Зведена таблиця підключення (Bilingual Pinout Table)
 
 | Колір витої пари / UTP Wire Color | Порт Deye (Deye Port RJ45) | Модуль / Hardware Module | Контакт / Pin | Вхід/Вихід / I/O | Пін ESP32-S3 / Pin | Призначення (UA) | Purpose (EN) |
@@ -48,11 +44,11 @@
 | **Біло-оранжевий**<br>*White-Orange* | **BMS Port**<br>Pin 4 | `SIT1051ATK/3` (CAN) | `CAN_H` | `TX / TXD` | `GPIO 4` | Передача даних CAN (`tx_pin`) | CAN Transmit (`tx_pin`) |
 | **Оранжевий**<br>*Orange* | **BMS Port**<br>Pin 5 | `SIT1051ATK/3` (CAN) | `CAN_L` | `RX / RXD` | `GPIO 5` | Прийом даних CAN (`rx_pin`) | CAN Receive (`rx_pin`) |
 | **Синій**<br>*Blue* | **BMS Port**<br>Pin 3 | `SIT1051ATK/3` (CAN) | — | `GND` | `GND` | Спільна земля CAN | CAN Ground |
-| — | — | `SIT1051ATK/3` (CAN) | — | `VCC` | `3.3V` *(або 5V)* | Живлення трансивера CAN | CAN Module Power |
+| — | — | `SIT1051ATK/3` (CAN) | — | `VCC` | `3.3V` | Живлення трансивера CAN (3.3V) | CAN Module Power (3.3V) |
 | **Зелений**<br>*Green* | **Modbus Port**<br>Pin 2 | `HW-0519` (RS485) | `A+` | `DI / TXD` | `GPIO 17` | Modbus UART TX (`uart_tx_pin`) | Modbus UART TX |
 | **Біло-зелений**<br>*White-Green* | **Modbus Port**<br>Pin 1 | `HW-0519` (RS485) | `B-` | `RO / RXD` | `GPIO 16` | Modbus UART RX (`uart_rx_pin`) | Modbus UART RX |
 | **Біло-синій**<br>*White-Blue* | **Modbus Port**<br>Pin 3 | `HW-0519` (RS485) | — | `GND` | `GND` | Спільна земля Modbus | Modbus Ground |
-| — | — | `HW-0519` (RS485) | — | `VCC` | `5V` *(або 3.3V)* | Живлення конвертера RS485 | RS485 Module Power |
+| — | — | `HW-0519` (RS485) | — | `VCC` | `3.3V` | Живлення конвертера RS485 (3.3V) | RS485 Module Power (3.3V) |
 | **Біло-коричневий**<br>*White-Brown* | **+12V Power**<br>*(Deye / БЖ)* | `DC-DC Step-Down` | `IN+` (+12V) | `OUT+` (+5V) | `5V / VIN` | Вхід живлення плати ESP32 | ESP32-S3 5V Power Input |
 | **Коричневий**<br>*Brown* | **GND Power**<br>*(Deye / БЖ)* | `DC-DC Step-Down` | `IN-` (GND) | `OUT-` (GND) | `GND` | Спільний мінус живлення | Common Power Ground |
 
@@ -83,35 +79,34 @@
 
 ## 🚀 Покрокове налаштування / How to Replicate Step-by-Step
 
-### 1. Клонування репозиторію / Clone Repository
+> [!NOTE]
+> **UA**: Вам **не потрібно** вручну завантажувати або клонувати сторонні пакети `esphome-deye-inverter` та `esphome-yambms`! Усі посилання на перевірені робочі форки автора ([`KBADPO/esphome-deye-inverter`](https://github.com/KBADPO/esphome-deye-inverter) та [`KBADPO/esphome-yambms`](https://github.com/KBADPO/esphome-yambms)) уже прописані в секції `packages:` у файлі [`YamBMS+Deye Inverter.example.yaml`](YamBMS+Deye%20Inverter.example.yaml). ESPHome автоматично завантажить потрібні компоненти по мережі під час компіляції.  
+> **EN**: You **do NOT need** to manually clone or download external package repositories! Direct links to the author's tested forks are already integrated inside the `packages:` section of [`YamBMS+Deye Inverter.example.yaml`](YamBMS+Deye%20Inverter.example.yaml). ESPHome downloads everything automatically during compilation.
+
+### Спосіб А: Через веб-інтерфейс Home Assistant (Найпростіший) / Option A: Via Home Assistant ESPHome Dashboard (Easiest)
+1. Відкрийте **ESPHome Dashboard** у Home Assistant ➔ Натисніть **+ New Device**.
+2. Відкрийте створений файл та скопіюйте вміст [`YamBMS+Deye Inverter.example.yaml`](YamBMS+Deye%20Inverter.example.yaml).
+3. У файлі `secrets.yaml` (в ESPHome Dashboard) пропишіть ваші `wifi_ssid`, `wifi_password`, `api_key`.
+4. Вкажіть параметри вашої батареї (кількість комірок, струми) та MAC-адресу BMS (`bms_ble_mac_address`).
+5. Натисніть **Install** — прошивка скомпілюється і завантажиться на ESP32 по Wi-Fi (OTA) або через USB.
+
+### Спосіб Б: Через консоль / Option B: Via Command Line (CLI)
 ```bash
+# 1. Клонувати репозиторій / Clone repo
 git clone https://github.com/KBADPO/YamBMS-Deye-Inverter-Fan.git
 cd YamBMS-Deye-Inverter-Fan
-```
 
-### 2. Налаштування паролів / Configure Secrets
-```bash
+# 2. Налаштувати secrets.yaml / Configure secrets
 cp secrets.yaml.example secrets.yaml
-```
-- **UA**: Заповніть у `secrets.yaml` назву та пароль Wi-Fi (`wifi_ssid`, `wifi_password`), API-ключ для Home Assistant (`api_key`) та пароль OTA.
-- **EN**: Fill in `secrets.yaml` with your Wi-Fi credentials, Home Assistant native API key, and OTA password.
 
-### 3. Налаштування прошивки ESPHome / Firmware Config
-```bash
+# 3. Створити робочий конфіг / Create config
 cp "YamBMS+Deye Inverter.example.yaml" "YamBMS+Deye Inverter.yaml"
-```
-- **UA**: Перевірте налаштування батареї (`yambms_battery_chemistry`, `yambms_cell_count`, струми, напруги) та вкажіть MAC-адресу вашої BMS (`bms_ble_mac_address`). Перевірте обрану плату та трансивер CAN у секції `packages:`.
-- **EN**: Review battery settings (`chemistry`, `cell_count`, current and voltage limits) and set your BMS MAC address (`bms_ble_mac_address`). Verify board and CAN transceiver packages.
 
-### 4. Компіляція та завантаження / Compile & Flash
-```bash
-esphome compile "YamBMS+Deye Inverter.yaml"
+# 4. Компіляція та прошивка / Compile & Flash
 esphome run "YamBMS+Deye Inverter.yaml"
 ```
-- **UA**: Також файл можна завантажити в **ESPHome Dashboard** у Home Assistant і виконати прошивку через браузер.
-- **EN**: Alternatively, import the file into the Home Assistant ESPHome Dashboard and flash via browser.
 
-### 5. Інтеграція в Home Assistant / Home Assistant Setup
+### Інтеграція в Home Assistant / Home Assistant Setup
 1. **ESPHome**: Пристрій автоматично з'явиться в Home Assistant — натисніть «Налаштувати» та введіть API-ключ.
 2. **Охолодження / Smart Fan**: Створіть необхідні помічники (helpers) та автоматизацію за інструкцією у файлі **[`ha_fan_config.md`](ha_fan_config.md)**.
 3. **Дашборд Lovelace**: Імпортуйте готовий дашборд сонячної станції з файлу **[`Dashboard Solar Station.yaml`](Dashboard%20Solar%20Station.yaml)**.
@@ -147,7 +142,6 @@ esphome run "YamBMS+Deye Inverter.yaml"
 
 ```text
 ├── images/                               # Схеми розпіновки та підключення / Pinout diagrams
-│   ├── wiring_pinout_table.png           # Таблиця підключення через виту пару / UTP wiring table
 │   ├── deye_bms_can_rj45.png             # Розпіновка BMS CAN порту Deye / Deye BMS CAN port
 │   ├── deye_modbus_rj45.png              # Розпіновка Modbus порту Deye / Deye Modbus port
 │   └── esp32_s3_pinout.png               # Розпіновка ESP32-S3 WROOM-1 / ESP32-S3 pinout
