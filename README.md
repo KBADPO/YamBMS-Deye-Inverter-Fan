@@ -5,149 +5,168 @@
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-green.svg)](https://www.gnu.org/licenses/gpl-3.0)
 [![Hardware](https://img.shields.io/badge/Hardware-ESP32--S3-red.svg)](https://www.espressif.com/)
 
-Готове рішення «під ключ» для моніторингу та керування сонячною станцією на базі гібридного інвертора **Deye SG0XLP1 (1-фазний низьковольтний 48V)**, агрегації кількох BMS акумулятора через **YamBMS** по шині CAN, безшумного охолодження 4-піновим кулером (20 кГц ШІМ) та готового комплексного дашборду **Home Assistant**.  
-*A turnkey, production-ready solution to monitor and manage a Deye SG0XLP1 hybrid inverter, aggregate battery BMS units via YamBMS over CAN bus, control external high-frequency (20kHz) PWM cooling fans, and visualize everything in Home Assistant.*
+**UA**: Готове рішення «під ключ» для моніторингу та керування сонячною станцією на базі гібридного інвертора **Deye SG0XLP1 (1-фазний низьковольтний 48V)**, об'єднання кількох BMS акумулятора через **YamBMS** по шині CAN, безшумного охолодження кулером (20 кГц ШІМ) та готового комплексного дашборду **Home Assistant**.
+
+**EN**: Turnkey, production-ready solution to monitor and manage a **Deye SG0XLP1 hybrid inverter (1-phase low-voltage 48V)**, aggregate battery BMS units via **YamBMS** over CAN bus, control external high-frequency (20 kHz) PWM cooling fans, and visualize everything in **Home Assistant**.
 
 ---
 
 ## ✨ Можливості проекту / Key Features
 
-1. ⚡ **Повний моніторинг і керування Deye (RS485 Modbus RTU)**:
-   - Читання всіх параметрів у реальному часі: напруга, струм і потужність генерації PV (сонячних панелей), навантаження будинку, мережі та акумулятора.
-   - Температури радіаторів AC та DC інвертора.
-   - Повне двостороннє керування режимами роботи інвертора, лімітами струмів заряду/розряду та розкладом Time of Use (TOU) прямо з Home Assistant.
-2. 🔋 **Розумне об'єднання батарей (YamBMS CAN Bus)**:
-   - Агрегація даних кількох BMS (наприклад, JK-BMS по BLE) в один віртуальний акумулятор.
-   - Динамічний розрахунок безпечних струмів заряду та розряду за температурою комірок (таблиці CCL/DCL) та станом заряду (Auto CVL / Float / Rebulk).
-   - Емуляція протоколу Pylontech/CANbus та пряма передача даних у CAN BMS порт інвертора Deye.
-3. 🌀 **Інтелектуальне 20 кГц ШІМ-охолодження (Smart Cooling Fan)**:
-   - Апаратна генерація ШІМ на частоті **20 кГц** (GPIO18) — жодного писку котушок та шуму двигуна на низьких обертах.
-   - Гнучкі криві обдуву в Home Assistant (лінійна, логарифмічна) за температурами AC/DC.
-   - **Випереджальні тригери**: запуск охолодження при високій генерації PV або високому навантаженні ще до перегріву радіатора.
-   - **Апаратний Fail-Safe**: при втраті зв'язку з HA або Wi-Fi кулер автоматично переходить на 10% потужності для захисту обладнання.
-4. 📊 **Готовий дашборд для Lovelace**:
-   - Інтерфейс у файлі [`Dashboard Solar Station.yaml`](Dashboard%20Solar%20Station.yaml) з красивими анімаціями потоків енергії (Power Flow Card), детальними комірками BMS, керуванням інвертором та панеллю налаштування вентилятора.
+### 1. ⚡ Моніторинг і керування Deye (RS485 Modbus RTU) / Deye Inverter Control
+- **UA**: Читання всіх параметрів у реальному часі (PV генерація MPPT1/MPPT2, навантаження будинку, мережа, батарея, температури AC/DC). Двостороннє керування режимами роботи інвертора, лімітами струму та графіком Time of Use (TOU) через Home Assistant.
+- **EN**: Real-time telemetry (PV MPPT1/MPPT2 power, home load, grid, battery, AC/DC heatsink temperatures). Two-way control of inverter operating modes, charge/discharge current limits, and Time of Use (TOU) schedules via Home Assistant.
+
+### 2. 🔋 Об'єднання батарей через YamBMS (CAN Bus) / Battery Aggregation
+- **UA**: Агрегація даних від кількох BMS (наприклад, JK-BMS через BLE) в один віртуальний блок. Розрахунок безпечних струмів заряду/розряду за температурою комірок (CCL/DCL) та станом заряду (Auto CVL / Float / Rebulk). Емуляція Pylontech CAN та пряма передача в BMS-порт інвертора Deye.
+- **EN**: Aggregates multi-BMS data (e.g. JK-BMS via BLE) into a single virtual battery bank. Dynamically computes safe charge/discharge currents based on cell temperatures (CCL/DCL) and charging state (Auto CVL / Float / Rebulk). Emulates Pylontech CAN protocol and sends data directly into Deye BMS port.
+
+### 3. 🌀 Розумне 20 кГц ШІМ-охолодження / Smart PWM Cooling Fan
+- **UA**: Апаратна генерація ШІМ на частоті **20 кГц** (GPIO18) — відсутність шуму та писку котушок. Підтримка 2-пінових кулерів через MOSFET або 4-пінових комп'ютерних PWM кулерів. Плавне регулювання за температурами AC/DC та випереджальними тригерами потужності. Апаратний **Fail-Safe** захист (10% потужності при втраті зв'язку з HA).
+- **EN**: Hardware 20 kHz PWM generation on GPIO18 — completely eliminates motor whine. Supports 2-pin fans via MOSFET module or 4-pin PC PWM fans. Dynamic speed calculation based on AC/DC heatsink temperatures and proactive power triggers. Hardware **Fail-Safe** protection (automatic 10% speed upon connection loss).
+
+### 4. 📊 Готовий дашборд Lovelace / Ready Lovelace Dashboard
+- **UA**: Повний дашборд у файлі [`Dashboard Solar Station.yaml`](Dashboard%20Solar%20Station.yaml) з анімованими потоками енергії, моніторингом комірок батареї, налаштуваннями інвертора та вкладкою керування охолодженням.
+- **EN**: Comprehensive Lovelace UI in [`Dashboard Solar Station.yaml`](Dashboard%20Solar%20Station.yaml) featuring animated power flows, cell-level BMS telemetry, inverter controls, and dedicated fan settings.
 
 ---
 
-## 🔌 Апаратне підключення та розпіновка / Hardware & Wiring
+## 🔌 Схема підключення на 1 виту пару (8 жил) / 8-Wire Twisted Pair All-in-One Wiring
 
-Плата: **ESP32-S3 DevKitC-1** (або сумісна з підтримкою USB/UART/CAN).
+**UA**: Усі комунікації між контролером ESP32-S3 та інвертором Deye (CAN-шина BMS, Modbus RS485 та живлення 12V/5V) реалізовано всього через **один стандартний 8-жильний кабель витої пари (UTP Cat5e/Cat6)**!
 
-| Функція / Function | Пін ESP32-S3 / Pin | Призначення / Purpose |
-| :--- | :--- | :--- |
-| **RS485 RX** | `GPIO16` | Modbus RTU RX від інвертора Deye (порт RS485/Meter через модуль TTL-RS485) |
-| **RS485 TX** | `GPIO17` | Modbus RTU TX до інвертора Deye (TTL-to-RS485) |
-| **PWM Fan** | `GPIO18` | ШІМ керування швидкістю 4-пінового комп'ютерного кулера (20 кГц) |
-| **CAN Bus** | Вбудований TWAI | CAN H / CAN L до BMS-порту інвертора Deye (через трансивер CAN) |
-| **RGB LED** | `GPIO48` | Індикація стану плати та мережі (DevKitC-1 LED-48) |
+**EN**: All communication lines between the ESP32-S3 controller and Deye inverter (CAN bus, Modbus RS485, and 12V/5V power) are routed through a **single standard 8-wire twisted-pair Ethernet cable (UTP Cat5e/Cat6)**!
 
-> [!TIP]
-> Для підключення до кулера рекомендується звичайний 4-піновий комп'ютерний вентилятор 12V (наприклад, Arctic P12/P14 PWM або Noctua). Пін PWM кулера підключається безпосередньо до GPIO18, живлення кулера — від зовнішнього джерела 12V (земля спільна з ESP32).
+<p align="center">
+  <img src="images/wiring_pinout_table.png" alt="Схема підключення витої пари / Wiring Pinout Table" width="950"/>
+</p>
+
+### 📋 Зведена таблиця підключення (Bilingual Pinout Table)
+
+| Колір витої пари / UTP Wire Color | Порт Deye (Deye Port RJ45) | Модуль / Hardware Module | Контакт / Pin | Вхід/Вихід / I/O | Пін ESP32-S3 / Pin | Призначення (UA) | Purpose (EN) |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **Біло-оранжевий**<br>*White-Orange* | **BMS Port**<br>Pin 4 | `SIT1051ATK/3` (CAN) | `CAN_H` | `TX / TXD` | `GPIO 4` | Передача даних CAN (`tx_pin`) | CAN Transmit (`tx_pin`) |
+| **Оранжевий**<br>*Orange* | **BMS Port**<br>Pin 5 | `SIT1051ATK/3` (CAN) | `CAN_L` | `RX / RXD` | `GPIO 5` | Прийом даних CAN (`rx_pin`) | CAN Receive (`rx_pin`) |
+| **Синій**<br>*Blue* | **BMS Port**<br>Pin 3 | `SIT1051ATK/3` (CAN) | — | `GND` | `GND` | Спільна земля CAN | CAN Ground |
+| — | — | `SIT1051ATK/3` (CAN) | — | `VCC` | `3.3V` *(або 5V)* | Живлення трансивера CAN | CAN Module Power |
+| **Зелений**<br>*Green* | **Modbus Port**<br>Pin 2 | `HW-0519` (RS485) | `A+` | `DI / TXD` | `GPIO 17` | Modbus UART TX (`uart_tx_pin`) | Modbus UART TX |
+| **Біло-зелений**<br>*White-Green* | **Modbus Port**<br>Pin 1 | `HW-0519` (RS485) | `B-` | `RO / RXD` | `GPIO 16` | Modbus UART RX (`uart_rx_pin`) | Modbus UART RX |
+| **Біло-синій**<br>*White-Blue* | **Modbus Port**<br>Pin 3 | `HW-0519` (RS485) | — | `GND` | `GND` | Спільна земля Modbus | Modbus Ground |
+| — | — | `HW-0519` (RS485) | — | `VCC` | `5V` *(або 3.3V)* | Живлення конвертера RS485 | RS485 Module Power |
+| **Біло-коричневий**<br>*White-Brown* | **+12V Power**<br>*(Deye / БЖ)* | `DC-DC Step-Down` | `IN+` (+12V) | `OUT+` (+5V) | `5V / VIN` | Вхід живлення плати ESP32 | ESP32-S3 5V Power Input |
+| **Коричневий**<br>*Brown* | **GND Power**<br>*(Deye / БЖ)* | `DC-DC Step-Down` | `IN-` (GND) | `OUT-` (GND) | `GND` | Спільний мінус живлення | Common Power Ground |
 
 ---
 
-## 🚀 Інструкція зі встановлення / How to Replicate
+### 🌀 Варіанти підключення кулера охолодження / Cooling Fan Connection Options
 
-Щоб розгорнути цю конфігурацію на власному обладнанні, виконайте наступні прості кроки:
+| Конфігурація / Setup | Підключення / Wiring | Пін ESP32 / Pin | Опис (UA) | Description (EN) |
+| :--- | :--- | :--- | :--- | :--- |
+| **Варіант 1 (Фактичний):<br>2-пін кулер + MOSFET**<br>*Option 1: 2-pin fan + MOSFET* | ШІМ сигнал ➔ Вхід `SIG` (Gate) модуля MOSFET | `GPIO 18` | Звичайний 2-дротовий кулер 12V підключається через силовий ключ MOSFET (наприклад, модуль D4184, IRF520 або LR7843). Сигнал 20 кГц ШІМ плавно регулює живлення вентилятора без писку котушок. | Standard 2-pin 12V fan driven by a power MOSFET module (e.g. D4184, IRF520, LR7843). 20 kHz PWM smoothly modulates supply voltage without audible coil noise. |
+| **Варіант 2 (Альтернатива):<br>4-пін комп'ютерний PWM кулер**<br>*Option 2: 4-pin PC PWM fan* | ШІМ сигнал ➔ 4-й пін кулера (PWM) | `GPIO 18` | Комп'ютерний 4-піновий вентилятор (наприклад, Noctua, Arctic P12 PWM). Живлення +12V та GND подаються напряму, а керуючий сигнал підключається безпосередньо до GPIO18. | 4-pin PC PWM fan (e.g. Noctua, Arctic P12 PWM). Constant 12V power is supplied; speed is modulated directly via the 4th PWM wire from GPIO18. |
 
-### Крок 1. Клонування репозиторію / Clone Repository
+---
+
+### 📌 Розпіновка портів Deye та плати ESP32-S3 / Deye & ESP32 Pinout References
+
+<p align="center">
+  <img src="images/deye_bms_can_rj45.png" alt="Deye BMS 485/CAN RJ45 Port" width="420"/>
+  &nbsp;&nbsp;&nbsp;&nbsp;
+  <img src="images/deye_modbus_rj45.png" alt="Deye Modbus RJ45 Port" width="420"/>
+</p>
+
+<p align="center">
+  <img src="images/esp32_s3_pinout.png" alt="ESP32-S3 WROOM-1 N16R8 Pinout" width="700"/>
+</p>
+
+---
+
+## 🚀 Покрокове налаштування / How to Replicate Step-by-Step
+
+### 1. Клонування репозиторію / Clone Repository
 ```bash
 git clone https://github.com/KBADPO/YamBMS-Deye-Inverter-Fan.git
 cd YamBMS-Deye-Inverter-Fan
 ```
 
-### Крок 2. Налаштування паролів / Configure Secrets
-Створіть власний файл `secrets.yaml` на основі шаблону:
+### 2. Налаштування паролів / Configure Secrets
 ```bash
 cp secrets.yaml.example secrets.yaml
 ```
-Відкрийте `secrets.yaml` у текстовому редакторі та вкажіть:
-- `wifi_ssid` та `wifi_password` — доступ до вашої мережі Wi-Fi;
-- `api_key` — ключ підключення ESPHome Native API до Home Assistant (згенеруйте у вебінтерфейсі ESPHome);
-- `ota_password` — пароль для оновлення прошивки повітрям (OTA).
+- **UA**: Заповніть у `secrets.yaml` назву та пароль Wi-Fi (`wifi_ssid`, `wifi_password`), API-ключ для Home Assistant (`api_key`) та пароль OTA.
+- **EN**: Fill in `secrets.yaml` with your Wi-Fi credentials, Home Assistant native API key, and OTA password.
 
-### Крок 3. Підготовка конфігурації прошивки / Firmware Config
-Скопіюйте готовий робочий шаблон:
+### 3. Налаштування прошивки ESPHome / Firmware Config
 ```bash
 cp "YamBMS+Deye Inverter.example.yaml" "YamBMS+Deye Inverter.yaml"
 ```
-Відкрийте `YamBMS+Deye Inverter.yaml` і перевірте параметри вашої системи:
-1. **Батарея**:
-   - `yambms_battery_chemistry`: `'1'` (LiFePO4) / `'2'` (Li-ion) / `'3'` (LTO)
-   - `yambms_cell_count`: `'16'` (для 48V збірки 16S)
-   - `yambms_bulk_v`: напруга повного заряду (наприклад, `'55.5'`)
-   - `yambms_float_v`: напруга буферного режиму (наприклад, `'54'`)
-   - `yambms_max_requested_charge_current`: максимальний бажаний струм заряду (А)
-   - `yambms_max_requested_discharge_current`: максимальний струм розряду (А)
-2. **BMS (JK-BMS BLE)**:
-   - `bms_ble_mac_address`: MAC-адреса вашої JK-BMS (наприклад, `c8:47:80:1b:78:d7`)
-   - `bms_ble_protocol_version`: версія протоколу (`JK02_32S` або `JK02_24S`)
-3. **Плата**:
-   - За замовчуванням увімкнено пакет `packages/board/board_ESP32-S3_DevKitC-1_LED-48.yaml`. Якщо у вас інша плата — розкоментуйте відповідний рядок у секції `remote_packages:`.
+- **UA**: Перевірте налаштування батареї (`yambms_battery_chemistry`, `yambms_cell_count`, струми, напруги) та вкажіть MAC-адресу вашої BMS (`bms_ble_mac_address`). Перевірте обрану плату та трансивер CAN у секції `packages:`.
+- **EN**: Review battery settings (`chemistry`, `cell_count`, current and voltage limits) and set your BMS MAC address (`bms_ble_mac_address`). Verify board and CAN transceiver packages.
 
-### Крок 4. Компіляція та прошивка / Compile & Flash
-Підключіть ESP32-S3 до комп'ютера через USB і виконайте:
+### 4. Компіляція та завантаження / Compile & Flash
 ```bash
 esphome compile "YamBMS+Deye Inverter.yaml"
 esphome run "YamBMS+Deye Inverter.yaml"
 ```
-*(Також ви можете імпортувати цей файл в **ESPHome Dashboard** у Home Assistant і прошити плату через браузер).*
+- **UA**: Також файл можна завантажити в **ESPHome Dashboard** у Home Assistant і виконати прошивку через браузер.
+- **EN**: Alternatively, import the file into the Home Assistant ESPHome Dashboard and flash via browser.
 
-### Крок 5. Налаштування в Home Assistant / Home Assistant Setup
-1. **Інтеграція ESPHome**: Після підключення плати до Wi-Fi Home Assistant автоматично знайде новий пристрій — підтвердіть його додавання та введіть API-ключ.
-2. **Помічники та логіка охолодження**:
-   - Додайте Helper-змінні та автоматизацію керування кулером згідно з інструкцією у файлі **[`ha_fan_config.md`](ha_fan_config.md)**.
-3. **Дашборд Lovelace**:
-   - Створіть новий дашборд у Home Assistant і вставте готовий код із файлу **[`Dashboard Solar Station.yaml`](Dashboard%20Solar%20Station.yaml)**.
+### 5. Інтеграція в Home Assistant / Home Assistant Setup
+1. **ESPHome**: Пристрій автоматично з'явиться в Home Assistant — натисніть «Налаштувати» та введіть API-ключ.
+2. **Охолодження / Smart Fan**: Створіть необхідні помічники (helpers) та автоматизацію за інструкцією у файлі **[`ha_fan_config.md`](ha_fan_config.md)**.
+3. **Дашборд Lovelace**: Імпортуйте готовий дашборд сонячної станції з файлу **[`Dashboard Solar Station.yaml`](Dashboard%20Solar%20Station.yaml)**.
 
 ---
 
-## 🎛️ Керування охолодженням у Home Assistant / Smart Fan Control
+## 🎛️ Зведення помічників кулера / Fan Control Helpers Summary
 
-Вкладка **«Вентилятор»** дашборду надає повний контроль над обдувом інвертора:
-
-| Група / Group | Сутність / Helper | Замовчування / Default | Опис / Description |
+| Помічник / Helper | Замовчування / Default | Опис (UA) | Description (EN) |
 | :--- | :--- | :--- | :--- |
-| **Статус / Status** | `sensor.deye_inverter_ac_temperature` | — | Температура радіатора AC інвертора (°C) |
-| **Статус / Status** | `sensor.deye_inverter_dc_temperature` | — | Температура радіатора DC інвертора (°C) |
-| **Статус / Status** | `number.inverter_cooling_fan_fan_speed_target` | — | Завдання швидкості обдуву кулера (0–100%) |
-| **Температура / Temp** | `input_number.fan_start_speed` | `20 %` | Початкова швидкість кулера при пуску |
-| **Температура / Temp** | `input_number.fan_hysteresis` | `2 °C` | Температурний гістерезис вимкнення |
-| **Температура / Temp** | `input_number.fan_ac_min_temp` | `45 °C` | Поріг старту вентилятора за AC |
-| **Температура / Temp** | `input_number.fan_ac_max_temp` | `65 °C` | Температура 100% обертів за AC |
-| **Температура / Temp** | `input_number.fan_dc_min_temp` | `45 °C` | Поріг старту вентилятора за DC |
-| **Температура / Temp** | `input_number.fan_dc_max_temp` | `65 °C` | Температура 100% обертів за DC |
-| **Температура / Temp** | `input_select.fan_control_law` | `Linear` | Крива обдуву (`Linear`, `Logarithmic`, `Reverse Logarithmic`) |
-| **Тригери / Triggers** | `input_boolean.enable_pv_power_trigger` | `off` | Увімкнення пуску за потужністю сонячних панелей (PV) |
-| **Тригери / Triggers** | `input_number.pv_power_threshold` | `3000 W` | Поріг потужності сонця для старту кулера |
-| **Тригери / Triggers** | `input_boolean.enable_out_power_trigger` | `off` | Увімкнення пуску за навантаженням інвертора |
-| **Тригери / Triggers** | `input_number.out_power_threshold` | `2000 W` | Поріг навантаження для старту кулера |
-| **Тригери / Triggers** | `input_boolean.enable_grid_power_trigger` | `off` | Увімкнення пуску за потужністю мережі |
-| **Тригери / Triggers** | `input_number.grid_power_threshold` | `2000 W` | Поріг потужності мережі для старту кулера |
+| `sensor.deye_inverter_ac_temperature` | — | Температура радіатора AC | AC heatsink temperature |
+| `sensor.deye_inverter_dc_temperature` | — | Температура радіатора DC | DC heatsink temperature |
+| `number.inverter_cooling_fan_fan_speed_target` | — | Цільова швидкість обдуву (0–100%) | Target fan speed (0–100%) |
+| `input_number.fan_start_speed` | `20 %` | Стартова швидкість при пуску | Initial fan start speed |
+| `input_number.fan_hysteresis` | `2 °C` | Гістерезис вимкнення за температурою | Temperature turn-off hysteresis |
+| `input_number.fan_ac_min_temp` | `45 °C` | Температура старту кулера по AC | AC start threshold temperature |
+| `input_number.fan_ac_max_temp` | `65 °C` | Температура 100% обертів по AC | AC max speed temperature |
+| `input_number.fan_dc_min_temp` | `45 °C` | Температура старту кулера по DC | DC start threshold temperature |
+| `input_number.fan_dc_max_temp` | `65 °C` | Температура 100% обертів по DC | DC max speed temperature |
+| `input_select.fan_control_law` | `Linear` | Закон зміни обертів (`Linear`, `Logarithmic`, `Reverse Logarithmic`) | Fan response curve |
+| `input_boolean.enable_pv_power_trigger` | `off` | Дозвіл пуску за потужністю сонця (PV) | Enable trigger by solar PV generation |
+| `input_number.pv_power_threshold` | `3000 W` | Поріг потужності сонця | PV power trigger threshold |
+| `input_boolean.enable_out_power_trigger` | `off` | Дозвіл пуску за навантаженням інвертора | Enable trigger by output load |
+| `input_number.out_power_threshold` | `2000 W` | Поріг вихідної потужності | Load power trigger threshold |
+| `input_boolean.enable_grid_power_trigger` | `off` | Дозвіл пуску за потужністю мережі | Enable trigger by grid power |
+| `input_number.grid_power_threshold` | `2000 W` | Поріг потужності мережі | Grid power trigger threshold |
 
-Детальний YAML-код помічників, оптимізована автоматизація розрахунку швидкості та картки Lovelace описані у файлі **[`ha_fan_config.md`](ha_fan_config.md)**.
+> Повний код налаштувань дивіться у файлі **[`ha_fan_config.md`](ha_fan_config.md)**.
 
 ---
 
 ## 📂 Структура репозиторію / Repository Structure
 
 ```text
-├── .gitignore                            # Захист secrets.yaml та робочих конфігурацій
+├── images/                               # Схеми розпіновки та підключення / Pinout diagrams
+│   ├── wiring_pinout_table.png           # Таблиця підключення через виту пару / UTP wiring table
+│   ├── deye_bms_can_rj45.png             # Розпіновка BMS CAN порту Deye / Deye BMS CAN port
+│   ├── deye_modbus_rj45.png              # Розпіновка Modbus порту Deye / Deye Modbus port
+│   └── esp32_s3_pinout.png               # Розпіновка ESP32-S3 WROOM-1 / ESP32-S3 pinout
+├── .gitignore                            # Захист secrets.yaml та робочих файлів
 ├── secrets.yaml.example                  # Шаблон паролів, ключів Wi-Fi та API
-├── YamBMS+Deye Inverter.example.yaml     # Готовий шаблон прошивки ESPHome (Deye + YamBMS + Fan)
-├── YamBMS BLE.example.yaml               # Готовий шаблон ESPHome для автономного режиму YamBMS BLE
-├── pv-inverter.Deye-SG0XLP1.yaml         # Базовий пакет сенсорів та регістрів Deye
-├── ha_fan_config.md                      # Повна інструкція з налаштування кулера в Home Assistant
-├── Dashboard Solar Station.yaml          # Готовий Lovelace Dashboard станції (BMS, Deye, Fan)
-└── Dashboard Overview.yaml               # Альтернативний Lovelace Dashboard
+├── YamBMS+Deye Inverter.example.yaml     # Шаблон прошивки ESPHome (Deye + YamBMS + Fan)
+├── YamBMS BLE.example.yaml               # Шаблон прошивки ESPHome для автономного режиму YamBMS BLE
+├── pv-inverter.Deye-SG0XLP1.yaml         # Базовий пакет сенсорів і регістрів Deye
+├── ha_fan_config.md                      # Інструкція з налаштування кулера в Home Assistant
+├── Dashboard Solar Station.yaml          # Готовий дашборд станції (BMS, Deye, Fan)
+└── Dashboard Overview.yaml               # Альтернативний дашборд
 ```
 
 ---
 
 ## 📜 Ліцензія та подяка / License & Acknowledgments
 
-- Дякуємо [Sleeper85](https://github.com/Sleeper85) за створення проекту [YamBMS](https://github.com/Sleeper85/esphome-yambms).
+- Дякуємо [Sleeper85](https://github.com/Sleeper85) за проект [YamBMS](https://github.com/Sleeper85/esphome-yambms).
 - Дякуємо [Lewa-Reka](https://github.com/Lewa-Reka) за розробку [esphome-deye-inverter](https://github.com/Lewa-Reka/esphome-deye-inverter).
 - Код поширюється на умовах ліцензії GNU General Public License v3.0 (GPL-3.0).
+
 
