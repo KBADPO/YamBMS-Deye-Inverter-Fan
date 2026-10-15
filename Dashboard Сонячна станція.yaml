@@ -1,0 +1,1314 @@
+views:
+  # - title: Power Flow
+  - icon: mdi:home-battery
+    type: panel
+    cards:
+      - cardstyle: full
+        wide: false
+        large_font: true
+        show_solar: true
+        show_battery: true
+        show_grid: true
+        center_no_grid: false
+        card_height: 100%
+        card_width: 100%
+        decimal_places: 2
+        decimal_places_energy: 1
+        dynamic_line_width: true
+        max_line_width: 8
+        min_line_width: 3
+        inverter:
+          modern: false
+          colour: '#9e9e9e'
+          autarky: power
+          model: deye
+          auto_scale: true
+          three_phase: false
+          label_autarky: ''
+          label_ratio: ''
+          navigate: /soniachna-stants-ia/7
+        battery:
+          invert_power: true
+          soc_end_of_charge: 100
+          shutdown_soc: 10
+          auto_scale: true
+          show_absolute: true
+          linear_gradient: true
+          dynamic_colour: true
+          animate: true
+          remaining_energy_to_shutdown: true
+          show_remaining_energy: true
+          hide_soc: false
+          show_daily: true
+          count: 1
+          max_power: 5000
+          label_daily_chrg: ДЕННИЙ ЗАРЯД
+          label_daily_dischrg: ДЕННИЙ РОЗРЯД
+          energy: 16000
+          navigate: /soniachna-stants-ia/1
+        solar:
+          mppts: 2
+          show_daily: true
+          pv2_name: Південь 4,3kW
+          auto_scale: false
+          display_mode: 2
+          dynamic_colour: true
+          max_power: 4300
+          pv2_max_power: 4300
+          navigate: /energy/electricity
+        load:
+          show_daily: true
+          auto_scale: true
+          dynamic_colour: true
+          dynamic_icon: true
+          additional_loads: 4
+          load1_name: Бойлер
+          load1_icon: mdi:water-boiler
+          load1_switch: switch.0x6c5cb1fffe135762
+          load2_name: Кондиціонер
+          load2_icon: mdi:air-conditioner
+          load2_switch: switch.0xa4c1389c31b5e52f
+          load3_name: Духовка
+          load3_icon: mdi:stove
+          load3_switch: switch.0xa4c138c6607e2edc
+          load4_name: Пральна машина
+          load4_icon: mdi:washing-machine
+          load4_switch: switch.0xa4c1388c583cc98e
+          load1_max_threshold: 10
+          load2_max_threshold: 10
+          load3_max_threshold: 10
+          load4_max_threshold: 10
+          show_aux: false
+          invert_flow: false
+        grid:
+          show_daily_buy: false
+          show_daily_sell: false
+          auto_scale: false
+          show_absolute: false
+          show_nonessential: false
+        type: custom:sunsynk-power-flow-card
+        entities:
+          inverter_power_175: sensor.deye_inverter_output_power
+          load_power_L1_165: sensor.deye_inverter_load_power
+          pv1_power_186: sensor.deye_inverter_pv1_power
+          pv2_power_187: sensor.deye_inverter_pv2_power
+          day_pv_energy_108: sensor.deye_inverter_daily_pv_production
+          remaining_solar: sensor.solcast_pv_forecast_forecast_remaining_today
+          day_battery_charge_70: sensor.deye_inverter_daily_battery_charge
+          day_battery_discharge_71: sensor.deye_inverter_daily_battery_discharge
+          essential_load1: sensor.0x6c5cb1fffe135762_power
+          essential_load2: sensor.0xa4c1389c31b5e52f_power
+          essential_load3: sensor.0xa4c138c6607e2edc_power
+          essential_load4: sensor.0xa4c1388c583cc98e_power
+          battery_voltage_183: sensor.yambms_1_total_voltage
+          battery_soc_184: sensor.invertorna_yambms_1_battery_soc
+          battery_power_190: sensor.yambms_1_power
+          battery_current_191: sensor.yambms_1_current
+          grid_power_169: sensor.deye_inverter_grid_power
+          inverter_status_59: sensor.deye_inverter_running_status
+          pv2_voltage_111: sensor.deye_inverter_pv2_voltage
+          pv2_current_112: sensor.deye_inverter_pv2_current
+          pv1_current_110: sensor.deye_inverter_pv1_current
+          pv1_voltage_109: sensor.deye_inverter_pv1_voltage
+          battery_temp_182: sensor.invertorna_jk_bms_1_max_temperature
+          battery_rated_capacity: number.deye_inverter_battery_capacity
+          battery_status: sensor.yambms_1_charging_status
+          dc_transformer_temp_90: sensor.deye_inverter_dc_temperature
+          radiator_temp_91: sensor.deye_inverter_ac_temperature
+          prog1_time: time.deye_inverter_time_of_use_1_start
+          prog1_capacity: number.deye_inverter_time_of_use_1_soc
+          prog1_charge: number.deye_inverter_time_of_use_1_soc
+          prog2_time: time.deye_inverter_time_of_use_2_start
+          prog2_capacity: number.deye_inverter_time_of_use_2_soc
+          prog2_charge: number.deye_inverter_time_of_use_2_soc
+          use_timer_248: switch.deye_inverter_time_of_use
+          priority_load_243: select.deye_inverter_energy_management_priority
+          inverter_voltage_154: sensor.deye_inverter_load_l1_voltage
+          load_frequency_192: sensor.deye_inverter_load_frequency
+          inverter_current_164: sensor.deye_inverter_output_l1_current
+          day_load_energy_84: sensor.deye_inverter_daily_load_consumption
+  # - title: Solcast
+  - path: solcast
+    icon: mdi:weather-sunny
+    cards:
+      - type: custom:apexcharts-card
+        header:
+          show: true
+          title: Прогноз на сьогодні та завтра
+          show_states: false
+        graph_span: 2d
+        span:
+          start: day
+        now:
+          show: true
+          label: Зараз
+        series:
+          - entity: sensor.solcast_pv_forecast_forecast_today
+            name: Сьогодні
+            type: area
+            color: '#ff9800'
+            opacity: 0.5
+            extend_to: false
+            unit: kW
+            show:
+              in_header: false
+              legend_value: false
+            data_generator: >
+              let f = entity.attributes.detailedForecast ||
+              entity.attributes.forecast;
+
+              if (!f) return [];
+
+              return f.map((entry) => {
+                let pv = entry.pv_estimate || 0;
+                return [new Date(entry.period_start).getTime(), pv];
+              });
+          - entity: sensor.solcast_pv_forecast_forecast_tomorrow
+            name: Завтра
+            type: area
+            color: '#3498db'
+            opacity: 0.5
+            extend_to: false
+            unit: kW
+            show:
+              in_header: false
+              legend_value: false
+            data_generator: >
+              let f = entity.attributes.detailedForecast ||
+              entity.attributes.forecast;
+
+              if (!f) return [];
+
+              return f.map((entry) => {
+                let pv = entry.pv_estimate || 0;
+                return [new Date(entry.period_start).getTime(), pv];
+              });
+          - entity: sensor.deye_inverter_pv1_power
+            name: Факт PV1
+            type: line
+            color: '#8BC34A'
+            stroke_width: 2
+            unit: kW
+            transform: 'return x / 1000;'
+            group_by:
+              func: avg
+              duration: 30m
+          - entity: sensor.deye_inverter_pv2_power
+            name: Факт PV2 (Південь)
+            type: line
+            color: '#4CAF50'
+            stroke_width: 2
+            unit: kW
+            transform: 'return x / 1000;'
+            group_by:
+              func: avg
+              duration: 30m
+      - type: custom:apexcharts-card
+        experimental:
+          color_threshold: true
+        header:
+          show: true
+          title: Прогноз на тиждень (кВт⋅год)
+          show_states: false
+        graph_span: 7d
+        span:
+          start: day
+        apex_config:
+          stroke:
+            curve: smooth
+            width: 3
+        series:
+          - entity: sensor.solcast_pv_forecast_forecast_today
+            name: Прогноз
+            type: area
+            opacity: 0.3
+            extend_to: false
+            show:
+              datalabels: true
+            color_threshold:
+              - value: 5
+                color: '#f44336'
+              - value: 10
+                color: '#ffc107'
+              - value: 32
+                color: '#8bc34a'
+            data_generator: |
+              const today = new Date();
+              today.setHours(12,0,0,0);
+              let data = [];
+              const days = [
+                'sensor.solcast_pv_forecast_forecast_today',
+                'sensor.solcast_pv_forecast_forecast_tomorrow',
+                'sensor.solcast_pv_forecast_forecast_day_3',
+                'sensor.solcast_pv_forecast_forecast_day_4',
+                'sensor.solcast_pv_forecast_forecast_day_5',
+                'sensor.solcast_pv_forecast_forecast_day_6',
+                'sensor.solcast_pv_forecast_forecast_day_7'
+              ];
+              days.forEach((entity_id, index) => {
+                let stateObj = hass.states[entity_id];
+                if (stateObj && !isNaN(stateObj.state)) {
+                   let ts = today.getTime() + (index * 24 * 60 * 60 * 1000);
+                   data.push([ts, parseFloat(stateObj.state)]);
+                }
+              });
+              return data;
+      - type: entities
+        title: Деталі прогнозу
+        entities:
+          - entity: sensor.solcast_pv_forecast_forecast_today
+            name: Прогноз на сьогодні
+          - entity: sensor.solcast_pv_forecast_forecast_remaining_today
+            name: Залишилось на сьогодні
+          - entity: sensor.solcast_pv_forecast_forecast_tomorrow
+            name: Прогноз на завтра
+          - entity: sensor.solcast_pv_forecast_peak_time_today
+            name: Час піку сьогодні
+          - entity: sensor.solcast_pv_forecast_peak_time_tomorrow
+            name: Час піку завтра
+          - entity: sensor.solcast_pv_forecast_power_now
+            name: Поточна генерація
+      - type: entities
+        title: Статус API
+        entities:
+          - entity: sensor.solcast_pv_forecast_api_last_polled
+            name: Останнє оновлення
+          - entity: sensor.solcast_pv_forecast_api_used
+            name: Використано API
+          - entity: sensor.solcast_pv_forecast_api_limit
+            name: Ліміт API
+          - entity: sensor.solar_kvadro
+            name: Solar.kvadro
+  # - title: YamBMS
+  - icon: mdi:car-battery
+    type: sections
+    max_columns: 3
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: YamBMS - Battery
+          - graph: line
+            type: sensor
+            entity: sensor.yambms_1_total_voltage
+            detail: 2
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+            hours_to_show: 8
+            limits: {}
+            name: Напруга
+          - graph: line
+            type: sensor
+            entity: sensor.invertorna_yambms_1_battery_soc
+            detail: 2
+            hours_to_show: 8
+            name: Ступінь заряду
+          - type: gauge
+            entity: sensor.yambms_1_current
+            needle: true
+            severity:
+              green: 0
+              yellow: -80
+              red: -135
+            max: 135
+            layout_options:
+              grid_columns: 2
+              grid_rows: 3
+            min: -135
+            name: Струм
+          - type: gauge
+            entity: sensor.yambms_1_power
+            needle: true
+            severity:
+              green: 0
+              yellow: -4000
+              red: -6000
+            max: 6000
+            min: -6000
+            layout_options:
+              grid_columns: 2
+              grid_rows: 3
+            name: Потужність
+          - type: tile
+            entity: sensor.invertorna_yambms_1_battery_capacity
+            name: 'Ємність батареї '
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: sensor.invertorna_yambms_1_battery_soh
+            name: 'Здоров''я '
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: sensor.yambms_1_capacity_remaining
+            name: 'Залишок ємності '
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: sensor.yambms_1_charging_status
+            name: Режим зарядки
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: sensor.yambms_1_delta_cell_voltage
+            name: Розбаланс комірок
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: binary_sensor.yambms_1_equalizing_state
+            name: Балансування
+            vertical: false
+            features_position: bottom
+          - type: entities
+            entities:
+              - entity: sensor.jk_bms_1_max_cell_voltage
+                name: Макс. напруга
+              - entity: sensor.jk_bms_1_max_voltage_cell
+                name: Комірки
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: entities
+            entities:
+              - entity: sensor.jk_bms_1_min_cell_voltage
+                name: Мін. напруга
+              - entity: sensor.jk_bms_1_min_voltage_cell
+                name: Комірки
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+          - type: entities
+            entities:
+              - entity: sensor.yambms_1_max_temperature
+                name: Макс. t°
+              - entity: sensor.yambms_1_min_temperature
+                name: Мін. t°
+            layout_options:
+              grid_columns: 2
+              grid_rows: 2
+        column_span: 1
+      - type: grid
+        cards:
+          - type: heading
+            heading: YamBMS - Status
+          - type: tile
+            entity: sensor.yambms_1_last_complete_charge
+            name: Повна зарядка
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: binary_sensor.deye_inverter_board_online_status
+            name: Стан Esp32
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: binary_sensor.yambms_1_canbus_1_status
+            name: CAN BUS
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: binary_sensor.yambms_1_inverter_communication_status
+            name: Зв'язок з інвертором
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: sensor.yambms_1_alarm
+            name: Alarm
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: sensor.yambms_1_warning
+            name: Warning
+            vertical: false
+            features_position: bottom
+          - type: entities
+            entities:
+              - entity: sensor.yambms_1_bms_count
+                name: BMS count
+              - entity: sensor.yambms_1_bms_combined
+                name: BMS combined
+              - entity: sensor.yambms_1_bms_blocking_charge
+                name: BMS blocking charge
+              - entity: sensor.yambms_1_bms_blocking_discharge
+                name: BMS blocking discharge
+              - entity: sensor.yambms_1_bms_in_alarm
+                name: BMS in alarm
+            layout_options:
+              grid_columns: 2
+              grid_rows: 4
+          - type: entities
+            entities:
+              - entity: sensor.yambms_1_requested_charge_voltage
+                name: Запит зарядної напруги
+              - entity: sensor.yambms_1_requested_charge_current
+                name: Запит зарядного струму
+              - entity: sensor.yambms_1_requested_discharge_voltage
+                name: Запит розрядної напруги
+              - entity: sensor.yambms_1_requested_discharge_current
+                name: Запит розрядного струму
+              - entity: binary_sensor.yambms_1_requested_force_charge
+                name: Запит форсованого заряду
+            grid_options:
+              columns: 6
+              rows: auto
+        column_span: 1
+      - type: grid
+        cards:
+          - type: heading
+            heading: YamBMS - Overview
+            heading_style: title
+          - type: markdown
+            content: |-
+              {% set on = '<font color="#4CAF50"><b>ON</b></font>' %}
+              {% set off = '<font color="#9e9e9e">OFF</font>' %}
+              <table>
+                <tr>
+                  <td>CCL Derating Reason</td>
+                  <td>{% set v = states('sensor.yambms_1_ccl_derating_reason') %}{% if v == 'No Derating' %}<font color="#4CAF50">{{ v }}</font>{% else %}<font color="#FFC107">{{ v }}</font>{% endif %} — {{ states('sensor.yambms_1_requested_charge_current')|float|round }} A</td>
+                </tr>
+                <tr>
+                  <td>DCL Derating Reason</td>
+                  <td>{% set v = states('sensor.yambms_1_dcl_derating_reason') %}{% if v == 'No Derating' %}<font color="#4CAF50">{{ v }}</font>{% else %}<font color="#FFC107">{{ v }}</font>{% endif %} — {{ states('sensor.yambms_1_requested_discharge_current')|float|round }} A</td>
+                </tr>
+                {% if is_state('switch.yambms_1_temperature_based_current_limitation','on') %}
+                <tr>
+                  <td>Temp. Based Current Limit</td>
+                  <td>{{ on }}</td>
+                </tr>
+                {% endif %}
+                {% if is_state('switch.yambms_1_automatic_charge_voltage','on') %}
+                <tr>
+                  <td>Automatic Charge Voltage</td>
+                  <td>{{ on }}</td>
+                </tr>
+                {% endif %}
+                {% if is_state('switch.yambms_1_automatic_charge_current','on') %}
+                <tr>
+                  <td>Automatic Charge Current</td>
+                  <td>{{ on }}</td>
+                </tr>
+                {% endif %}
+                {% if is_state('switch.yambms_1_automatic_discharge_current','on') %}
+                <tr>
+                  <td>Automatic Discharge Current</td>
+                  <td>{{ on }}</td>
+                </tr>
+                {% endif %}
+                {% if is_state('switch.yambms_1_automatic_eoc_current','on') %}
+                <tr>
+                  <td>Automatic EOC Current</td>
+                  <td>{% set eoc_status = states('sensor.yambms_1_auto_eoc_status') %}{% set eoc_val %}{{ states('number.yambms_1_auto_eoc_target_hour') | int }}:{{ '%02d' % (states('number.yambms_1_auto_eoc_target_minute') | int) }} — {{ eoc_status }}{% endset %}{% if eoc_status.startswith('Stop:') %}<font color="#FFC107">{{ eoc_val }}</font>{% elif eoc_status.startswith('Run') %}<font color="#4CAF50">{{ eoc_val }}</font>{% else %}{{ eoc_val }}{% endif %}</td>
+                </tr>
+                {% endif %}
+                {% if is_state('switch.yambms_1_automatic_soc_limit','on') %}
+                <tr>
+                  <td>Automatic SoC Limit</td>
+                  <td>{% set soc_status = states('sensor.yambms_1_auto_soc_limit_status') %}{% if soc_status.startswith('Stop:') %}<font color="#FFC107">{{ states('number.yambms_1_auto_soc_limit') }} % — {{ soc_status }}</font>{% elif soc_status == 'Run' %}<font color="#4CAF50">{{ states('number.yambms_1_auto_soc_limit') }} % — {{ soc_status }}</font>{% else %}{{ states('number.yambms_1_auto_soc_limit') }} % — {{ soc_status }}{% endif %}</td>
+                </tr>
+                {% endif %}
+                {% set rebulk_days = states('number.yambms_1_rebulk_days') | int %}
+                {% if rebulk_days != 0 %}
+                <tr>
+                  <td>Rebulk Days</td>
+                  <td>{% set last = strptime(states('sensor.yambms_1_last_complete_charge') | trim, '%H:%M %d %b %Y') %}{% set remaining = (last.date() + timedelta(days=rebulk_days) - now().date()).days %}{{ rebulk_days }} days — {% if remaining < 0 %}<font color="#F44336">{{ remaining | abs }} overdue</font>{% elif remaining == 0 %}<font color="#F44336">{{ remaining }} remaining</font>{% elif remaining <= 2 %}<font color="#FFC107">{{ remaining }} remaining</font>{% else %}<font color="#4CAF50">{{ remaining }} remaining</font>{% endif %}</td>
+                </tr>
+                {% endif %}
+                <tr>
+                  <td>Rebulk SoC</td>
+                  <td>{{ states('number.yambms_1_rebulk_soc')|float|round }} %</td>
+                </tr>
+                <tr>
+                  <td>Rebulk Voltage</td>
+                  <td>{{ states('number.yambms_1_rebulk_v')|float|round(2) }} V</td>
+                </tr>
+                </table>
+          - type: heading
+            heading: YamBMS - Diagnostic
+            heading_style: title
+          - type: markdown
+            content: |2
+                <table>
+                <tr>
+                  <td>Uptime</td>
+                  <td>{{ states('sensor.deye_inverter_board_uptime') }}</td>
+                </tr>
+                <tr>
+                  <td>Loop Time</td>
+                  <td>{{ states('sensor.deye_inverter_board_debug_loop_time')|float|round }} ms</td>
+                </tr>
+                  <tr>
+                  <td>Heap Free Memory</td>
+                  <td>{{ states('sensor.deye_inverter_board_debug_heap_free_percent')|float|round }} %</td>
+                </tr>
+                <tr>
+                  <td>YamBMS Running version</td>
+                  <td>{{ states('sensor.yambms_1_running_version') }}</td>
+                </tr>
+                <tr>
+                  <td>YamBMS Last version</td>
+                  <td>{{ states('sensor.yambms_1_last_version') }}</td>
+                </tr>
+                <tr>
+                  <td>ESPHome Version</td>
+                  <td>{{ states('sensor.deye_inverter_board_esphome_version')[:8] }}</td>
+                </tr>
+              </table>
+  # - title: Settings
+  - icon: mdi:cog
+    cards:
+      - type: entity-filter
+        entities:
+          - entity: select.yambms_1_canbus_1_yambms_name
+            name: CANBUS YamBMS name
+          - entity: select.yambms_1_canbus_1_yambms_protocol
+            name: CANBUS YamBMS protocol
+          - entity: select.yambms_1_rs485_1_yambms_protocol
+            name: RS485 YamBMS protocol
+        conditions:
+          - condition: state
+            state_not: unavailable
+        card:
+          title: YamBMS - Inverter Comm. Protocol
+      - type: entities
+        entities:
+          - entity: switch.yambms_1_charge_enabled
+            name: Charge enabled
+          - entity: switch.yambms_1_discharge_enabled
+            name: Discharge enabled
+          - entity: binary_sensor.invertorna_yambms_1_charging_allowed
+            name: Charging allowed
+          - entity: binary_sensor.invertorna_yambms_1_discharging_allowed
+            name: Discharging allowed
+        title: YamBMS - Charge / Discharge switch
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - entity: sensor.yambms_1_charging_status
+            name: Charging Status
+          - entity: sensor.yambms_1_charging_instruction
+            name: Charging Instruction
+          - entity: switch.yambms_1_float_charge_enabled
+            name: Float charge enabled
+          - entity: switch.yambms_1_eoc_timer_enabled
+            name: EOC timer enabled
+          - entity: number.yambms_1_bulk_voltage
+            name: Bulk voltage
+          - entity: number.yambms_1_float_voltage
+            name: Float voltage
+          - entity: number.yambms_1_inverter_offset_v
+            name: Inverter Offset V.
+        title: YamBMS - Charging Settings
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - entity: number.yambms_1_rebulk_soc
+            name: Rebulk SoC
+          - entity: number.yambms_1_rebulk_v
+            name: Rebulk V.
+          - entity: number.yambms_1_rebulk_days
+            name: Rebulk Days
+          - entity: switch.yambms_1_force_bulk
+            name: Force Bulk
+        title: YamBMS - ReBulk
+      - type: entities
+        entities:
+          - entity: number.yambms_1_max_requested_charge_current
+            name: Max charge current
+          - entity: number.yambms_1_max_requested_discharge_current
+            name: Max discharge current
+          - entity: switch.yambms_1_temperature_based_current_limitation
+            name: Temperature-based current limitation
+          - entity: sensor.yambms_1_ccl_derating_reason
+            name: CCL Derating Reason
+          - entity: sensor.yambms_1_dcl_derating_reason
+            name: DCL Derating Reason
+        title: YamBMS - Max requested current
+      - type: entities
+        entities:
+          - entity: switch.yambms_1_request_force_charge
+            name: Request force charge
+          - entity: number.yambms_1_request_force_charge_start_soc
+            name: Force charge Start SoC
+          - entity: number.yambms_1_request_force_charge_stop_soc
+            name: Force charge Stop SoC
+          - entity: binary_sensor.yambms_1_requested_force_charge
+            name: Requested Force Charge
+        title: YamBMS - Request force charge  (авар. заряд)
+      - type: entities
+        entities:
+          - entity: sensor.yambms_1_requested_charge_voltage
+            name: Requested Charge Voltage
+          - entity: sensor.yambms_1_requested_discharge_voltage
+            name: Requested Discharge Voltage
+          - entity: sensor.yambms_1_requested_charge_current
+            name: Requested Charge Current
+          - entity: sensor.yambms_1_requested_discharge_current
+            name: Requested Discharge Current
+        title: YamBMS - Requested Values
+    visible:
+      - user: 7b4fb52ead7b46d58553ee40e8a9225d
+  # - title: Auto Functions
+  - icon: mdi:robot-outline
+    cards:
+      - type: entities
+        entities:
+          - entity: switch.yambms_1_automatic_charge_voltage
+            name: Automatic Charge Voltage
+          - entity: number.yambms_1_auto_cvl_boost_charge_v
+            name: Auto CVL Boost Charge V.
+        title: YamBMS - Auto CVL (добивання розбалансу)
+      - type: entities
+        entities:
+          - entity: select.yambms_1_automatic_float_voltage
+            name: Automatic Float Voltage
+          - entity: sensor.yambms_1_auto_float_voltage
+            name: Auto Float Voltage
+          - entity: number.yambms_1_auto_float_update_interval
+            name: Update Interval
+          - entity: number.yambms_1_auto_float_voltage_step
+            name: Voltage Step
+        title: YamBMS - Auto Float
+      - type: entities
+        entities:
+          - entity: switch.yambms_1_automatic_charge_current
+            name: Automatic Charge Current
+          - entity: switch.yambms_1_automatic_discharge_current
+            name: Automatic Discharge Current
+        title: YamBMS - Auto CCL / DCL
+        show_header_toggle: false
+      - type: entities
+        entities:
+          - entity: switch.yambms_1_automatic_soc_limit
+            name: Automatic SoC Limit
+          - entity: number.yambms_1_auto_soc_limit
+            name: SoC Limit
+          - entity: number.yambms_1_auto_soc_limit_hysteresis
+            name: SoC Limit Hysteresis
+          - entity: select.yambms_1_auto_soc_limit_mode
+            name: Auto SoC Limit Mode
+          - entity: sensor.yambms_1_auto_soc_limit_status
+            name: Auto SoC Limit Status
+        title: YamBMS - Auto SoC Limit
+      - type: entities
+        entities:
+          - entity: switch.yambms_1_automatic_eoc_current
+            name: Automatic EOC Current
+          - entity: sensor.yambms_1_auto_eoc_status
+            name: Status
+          - entity: sensor.yambms_1_auto_eoc_current
+            name: Required Current
+          - entity: number.yambms_1_auto_eoc_target_hour
+            name: Target hour
+          - entity: number.yambms_1_auto_eoc_target_minute
+            name: Target minute
+          - entity: number.yambms_1_auto_eoc_correction
+            name: Current Correction
+          - entity: number.yambms_1_auto_eoc_capacity_modifier
+            name: Capacity Modifier
+          - entity: number.yambms_1_auto_eoc_increase_stop_hours
+            name: Stop hours
+          - entity: number.yambms_1_auto_eoc_increase_stop_soc
+            name: Stop SoC
+        title: YamBMS - Auto EOC
+    visible:
+      - user: 7b4fb52ead7b46d58553ee40e8a9225d
+  # - title: Diagnostic
+  - icon: mdi:stethoscope
+    cards:
+      - type: entity-filter
+        entities:
+          - entity: sensor.deye_inverter_board_debug_free_psram_percent
+            name: Debug Free PSRAM (%)
+          - entity: sensor.deye_inverter_board_debug_free_psram
+            name: Debug Free PSRAM
+          - entity: sensor.deye_inverter_board_debug_heap_free_percent
+            name: Debug Heap free (%)
+          - entity: sensor.deye_inverter_board_debug_heap_free
+            name: Debug Heap free
+          - entity: sensor.deye_inverter_board_debug_heap_max_block_percent
+            name: Debug Heap max block (%)
+          - entity: sensor.deye_inverter_board_debug_heap_max_block
+            name: Debug Heap max block
+          - entity: sensor.deye_inverter_board_debug_loop_time
+            name: Debug Loop time
+          - entity: sensor.deye_inverter_board_debug_reset_reason
+            name: Debug Reset reason
+          - entity: sensor.deye_inverter_board_uptime
+            name: Board Uptime
+          - entity: sensor.deye_inverter_board_esphome_version
+            name: ESPHome version
+          - entity: button.deye_inverter_board_restart
+            name: Board Restart
+        conditions:
+          - condition: state
+            state_not: unavailable
+        card:
+          title: YamBMS - Diagnostic
+      - type: entities
+        entities:
+          - entity: sensor.yambms_1_requested_charge_voltage
+            name: Requested Charge Voltage
+          - entity: sensor.yambms_1_requested_discharge_voltage
+            name: Requested Discharge Voltage
+          - entity: sensor.yambms_1_requested_charge_current
+            name: Requested Charge Current
+          - entity: sensor.yambms_1_requested_discharge_current
+            name: Requested Discharge Current
+        title: YamBMS - Requested Values
+      - type: entity-filter
+        entities:
+          - entity: binary_sensor.yambms_1_canbus_1_status
+            name: CANBUS Status
+          - entity: switch.yambms_1_canbus_1_inverter_heartbeat_monitoring
+            name: CANBUS Inverter Heartbeat Monitoring
+          - entity: sensor.yambms_1_canbus_1_inverter_heartbeat
+            name: CANBUS Inverter Heartbeat
+          - entity: binary_sensor.yambms_1_rs485_1_status
+            name: RS485 Status
+          - entity: switch.yambms_1_rs485_1_inverter_heartbeat_monitoring
+            name: RS485 Inverter Heartbeat Monitoring
+          - entity: sensor.yambms_1_rs485_1_inverter_heartbeat
+            name: RS485 Inverter Heartbeat
+        conditions:
+          - condition: state
+            state_not: unavailable
+        card:
+          title: YamBMS - Inverter Status & Heartbeat
+    type: masonry
+  # - title: BMS
+  - icon: mdi:battery-plus
+    type: sections
+    max_columns: 3
+    sections:
+      - type: grid
+        column_span: 1
+        cards:
+          - type: heading
+            heading: BMS 1
+            heading_style: title
+            badges:
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: binary_sensor.jk_bms_1_online_status
+                color: state
+                name: Online
+                state_content: name
+              - type: entity
+                show_state: true
+                show_icon: true
+                entity: binary_sensor.jk_bms_1_can_be_combined
+                color: state
+                name: Combined
+                state_content: name
+          - type: grid
+            square: false
+            columns: 1
+            cards:
+              - type: markdown
+                content: >-
+                  <center>Time : <b><font color=red> {{
+                  states('sensor.jk_bms_1_total_runtime_formatted',
+                  rounded=True) | upper }}</font>
+            layout_options:
+              grid_columns: 2
+              grid_rows: 1
+          - type: grid
+            square: false
+            columns: 1
+            cards:
+              - type: markdown
+                content: >-
+                  <center>Error : <b><font color=red> {{
+                  states('sensor.jk_bms_1_errors', rounded=True) }}</font>
+            layout_options:
+              grid_columns: 2
+              grid_rows: 1
+          - type: grid
+            square: false
+            columns: 3
+            cards:
+              - type: markdown
+                content: >-
+                  <center>Charge : <b>{% if
+                  states('binary_sensor.jk_bms_1_charging') == 'on' %} <font
+                  color=#41CD52>{{ states('binary_sensor.jk_bms_1_charging') |
+                  upper }}</font> {% else %} <font color=#3090C7>{{
+                  states('binary_sensor.jk_bms_1_charging') | upper }}</font> {%
+                  endif %}
+              - type: markdown
+                content: >-
+                  <center>Discharge : <b> {% if
+                  states('binary_sensor.jk_bms_1_discharging') == 'on' %} <font
+                  color=#41CD52>{{ states('binary_sensor.jk_bms_1_discharging')
+                  | upper }}</font> {% else %} <font color=#3090C7>{{
+                  states('binary_sensor.jk_bms_1_discharging') | upper }}</font>
+                  {% endif %}
+              - type: markdown
+                content: >-
+                  <center>Balance : <b> {% if
+                  states('binary_sensor.jk_bms_1_equalizing') == 'on' %} <font
+                  color=#41CD52>{{ states('binary_sensor.jk_bms_1_equalizing') |
+                  upper }}</font> {% else %} <font color=#3090C7>{{
+                  states('binary_sensor.jk_bms_1_equalizing') | upper }}</font>
+                  {% endif %}
+              - type: markdown
+                content: >-
+                  <center><b><font color=#41CD52 size=4>{{
+                  states('sensor.jk_bms_1_total_voltage', rounded=True) }}
+                  V</font></b>
+              - type: markdown
+                content: >-
+                  <center><b><font color=#41CD52 size=4>{{
+                  states('sensor.jk_bms_1_current', rounded=True) }}
+                  A</font></b>
+              - type: markdown
+                content: >-
+                  <center><b><font color=#41CD52 size=4>{{
+                  states('sensor.jk_bms_1_power', rounded=True) }} W</font>
+          - type: grid
+            square: false
+            columns: 2
+            cards:
+              - type: markdown
+                content: >-
+                  <center><b><font size=4>SoC :&nbsp;&nbsp;<font color=#41CD52
+                  size=4>{{ states('sensor.jk_bms_2_battery_soc', rounded=True)
+                  }} %</font></font>
+              - type: markdown
+                content: >-
+                  <center><b><font size=4>SoH :&nbsp;&nbsp;<font color=#41CD52
+                  size=4>{{ states('sensor.jk_bms_2_battery_soh', rounded=True)
+                  }} %</font></font>
+              - type: markdown
+                content: >-
+                  <center> Battery Capacity :&nbsp;&nbsp;<font color=#41CD52>{{
+                  states('sensor.jk_bms_1_full_charge_capacity', rounded=True)
+                  }} Ah</font><br> Cycle Capacity :&nbsp;&nbsp;<font
+                  color=#41CD52>{{
+                  states('sensor.jk_bms_1_total_charging_cycle_capacity',
+                  rounded=True) }} Ah</font><br> Ave. Cell Vol.
+                  :&nbsp;&nbsp;<font color=#41CD52>{{
+                  states('sensor.jk_bms_1_average_cell_voltage', rounded=True)
+                  }} V</font><br> Balance Cur. :&nbsp;&nbsp;<font
+                  color=#41CD52>{{ states('sensor.jk_bms_1_balancing_current',
+                  rounded=True) }} A</font><br> Max temp. :&nbsp;&nbsp;<font
+                  color=#41CD52>{{
+                  states('sensor.invertorna_jk_bms_1_max_temperature',
+                  rounded=True) }} °C</font>
+              - type: markdown
+                content: >-
+                  <center> Remain Capacity :&nbsp;&nbsp;<font color=#41CD52>{{
+                  states('sensor.jk_bms_1_battery_capacity_remaining',
+                  rounded=True) }} Ah</font><br> Cycle Count :&nbsp;&nbsp;<font
+                  color=#41CD52>{{ states('sensor.jk_bms_1_charging_cycles',
+                  rounded=True) }}</font><br> Delta Cell Vol. :&nbsp;&nbsp;<font
+                  color=#41CD52>{{ states('sensor.jk_bms_1_delta_cell_voltage',
+                  rounded=True) }} V</font><br> MOS temp. :&nbsp;&nbsp;<font
+                  color=#41CD52>{{ states('sensor.jk_bms_1_mosfet_temperature',
+                  rounded=True) }} °C</font><br> Min temp. :&nbsp;&nbsp;<font
+                  color=#41CD52>{{
+                  states('sensor.invertorna_jk_bms_1_min_temperature',
+                  rounded=True) }} °C</font>
+          - type: grid
+            square: false
+            columns: 2
+            cards:
+              - type: markdown
+                content: >-
+
+                  {% macro cell_v(num, entity, max_color = 'red' , min_color =
+                  '#3090C9', lead_zero = 0, spaces=3) -%} {% if lead_zero %}0{%
+                  endif %}{{num}}.{% for spaces in range(0, spaces) -%} {{
+                  '&nbsp;' }} {%- endfor %} {% if
+                  states('sensor{}_max_voltage_cell'.format(entity),
+                  rounded=True) == '{}'.format(num) %} <font color='{{ max_color
+                  }}'> {% elif
+                  states('sensor{}_min_voltage_cell'.format(entity),
+                  rounded=True) == '{}'.format(num) %} <font color='{{ min_color
+                  }}'> {% else %} <font> {% endif %}
+
+                  {{ states('sensor{}_cell_voltage_{}{}'.format(entity,
+                  ''.zfill(lead_zero), num), rounded=True) }} V</font> {% if
+                  has_value('sensor{}_cell_resistance_{}{}'.format(entity,
+                  ''.zfill(lead_zero), num)) %} /  {{
+                  states('sensor{}_cell_resistance_{}{}'.format(entity,
+                  ''.zfill(lead_zero), num) , rounded=True) }} Ω {% endif %}
+                  <br>
+
+                  {% endmacro %}
+
+                  <center>
+
+                  {{ cell_v(lead_zero=1, num=1, entity='.jk_bms_1') }} {{
+                  cell_v(lead_zero=1, num=2, entity='.jk_bms_1') }} {{
+                  cell_v(lead_zero=1, num=3, entity='.jk_bms_1') }} {{
+                  cell_v(lead_zero=1, num=4, entity='.jk_bms_1') }} {{
+                  cell_v(lead_zero=1, num=5, entity='.jk_bms_1') }} {{
+                  cell_v(lead_zero=1, num=6, entity='.jk_bms_1') }} {{
+                  cell_v(lead_zero=1, num=7, entity='.jk_bms_1') }} {{
+                  cell_v(lead_zero=1, num=8, entity='.jk_bms_1')
+                  }}                  
+
+                  </center>
+              - type: markdown
+                content: >-
+
+                  {% macro cell_v(num, entity, max_color = 'red' , min_color =
+                  '#3090C9', lead_zero = 0, spaces=3) -%} {% if lead_zero %}0{%
+                  endif %}{{num}}.{% for spaces in range(0, spaces) -%} {{
+                  '&nbsp;' }} {%- endfor %} {% if
+                  states('sensor{}_max_voltage_cell'.format(entity),
+                  rounded=True) == '{}'.format(num) %} <font color='{{ max_color
+                  }}'> {% elif
+                  states('sensor{}_min_voltage_cell'.format(entity),
+                  rounded=True) == '{}'.format(num) %} <font color='{{ min_color
+                  }}'> {% else %} <font> {% endif %}
+
+                  {{ states('sensor{}_cell_voltage_{}{}'.format(entity,
+                  ''.zfill(lead_zero), num), rounded=True) }} V</font> {% if
+                  has_value('sensor{}_cell_resistance_{}{}'.format(entity,
+                  ''.zfill(lead_zero), num)) %} /  {{
+                  states('sensor{}_cell_resistance_{}{}'.format(entity,
+                  ''.zfill(lead_zero), num) , rounded=True) }} Ω {% endif %}
+                  <br>
+
+                  {% endmacro %}
+
+                  <center>
+
+                  {{ cell_v(lead_zero=1, num=9, entity='.jk_bms_1') }} {{
+                  cell_v(lead_zero=0, num=10, entity='.jk_bms_1') }} {{
+                  cell_v(lead_zero=0, num=11, entity='.jk_bms_1') }} {{
+                  cell_v(lead_zero=0, num=12, entity='.jk_bms_1') }} {{
+                  cell_v(lead_zero=0, num=13, entity='.jk_bms_1') }} {{
+                  cell_v(lead_zero=0, num=14, entity='.jk_bms_1') }} {{
+                  cell_v(lead_zero=0, num=15, entity='.jk_bms_1') }} {{
+                  cell_v(lead_zero=0, num=16, entity='.jk_bms_1')
+                  }}              
+
+                  </center>
+          - type: entity-filter
+            entities:
+              - entity: switch.jk_bms_1_charge_switch
+                name: Charge switch
+              - entity: switch.jk_bms_1_discharge_switch
+                name: Discharge switch
+              - entity: switch.jk_bms_1_balance_switch
+                name: Balance switch
+              - entity: switch.jk_bms_1_enable_bluetooth_connection
+                name: Bluetooth
+              - entity: number.jk_bms_1_charging_cycles_offset
+                name: Charging Cycles Offset
+            conditions:
+              - condition: state
+                state_not: unavailable
+    visible:
+      - user: 7b4fb52ead7b46d58553ee40e8a9225d
+    cards: []
+  # - title: Fan
+  - icon: mdi:fan
+    type: sections
+    max_columns: 3
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: Fan Status
+          - type: tile
+            entity: sensor.deye_inverter_ac_temperature
+            name: 'AC Температура '
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: sensor.deye_inverter_dc_temperature
+            name: DC Температура
+            vertical: false
+            features_position: bottom
+          - type: history-graph
+            entities:
+              - number.inverter_cooling_fan_fan_speed_target
+            hours_to_show: 24
+            show_names: true
+            logarithmic_scale: false
+            fit_y_data: true
+      - type: grid
+        cards:
+          - type: heading
+            heading: Temperature Controls
+            visibility:
+              - condition: user
+                users:
+                  - 7b4fb52ead7b46d58553ee40e8a9225d
+          - type: tile
+            entity: input_number.fan_start_speed
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: input_number.fan_hysteresis
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: input_number.fan_ac_min_temp
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: input_number.fan_ac_max_temp
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: input_number.fan_dc_min_temp
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: input_number.fan_dc_max_temp
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: input_select.fan_control_law
+            vertical: false
+            features_position: bottom
+      - type: grid
+        cards:
+          - type: heading
+            heading: Power Triggers
+          - type: tile
+            entity: input_boolean.enable_pv_power_trigger
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: input_number.pv_power_threshold
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: input_boolean.enable_out_power_trigger
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: input_number.out_power_threshold
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: input_boolean.enable_grid_power_trigger
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: input_number.grid_power_threshold
+            vertical: false
+            features_position: bottom
+        visibility:
+          - condition: user
+            users:
+              - 7b4fb52ead7b46d58553ee40e8a9225d
+  # - title: Inverter
+  - icon: mdi:power-box
+    type: sections
+    max_columns: 3
+    sections:
+      - type: grid
+        cards:
+          - type: heading
+            heading: Power Overview
+          - type: tile
+            entity: sensor.deye_inverter_pv_power
+            name: PV Power
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: sensor.deye_inverter_load_power
+            name: Load Power
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: sensor.deye_inverter_grid_power
+            name: Grid Power
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: sensor.deye_inverter_pv2_current
+          - type: tile
+            entity: sensor.deye_inverter_pv2_voltage
+      - type: grid
+        cards:
+          - type: heading
+            heading: Status
+          - type: tile
+            entity: sensor.deye_inverter_device_alarm
+          - type: tile
+            entity: sensor.deye_inverter_device_fault
+          - type: tile
+            entity: sensor.deye_inverter_running_status
+            name: Status
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: sensor.deye_inverter_battery_voltage
+            name: Battery Voltage
+            vertical: false
+            features_position: bottom
+          - type: history-graph
+            entities:
+              - sensor.yambms_1_canbus_1_inverter_heartbeat
+            hours_to_show: 24
+            logarithmic_scale: false
+            expand_legend: true
+          - type: tile
+            entity: sensor.deye_inverter_ac_temperature
+            features:
+              - type: trend-graph
+          - type: tile
+            entity: sensor.deye_inverter_dc_temperature
+            features:
+              - type: trend-graph
+      - type: grid
+        cards:
+          - type: heading
+            heading: Settings
+          - type: tile
+            entity: select.deye_inverter_system_work_mode
+            name: Work Mode
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: switch.deye_inverter_solar_sell
+            name: Solar Sell
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: number.deye_inverter_max_sell_power
+            name: Max Solar Sell Power
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: number.deye_inverter_maximum_battery_charge_current
+            name: Max Charge Current
+            vertical: false
+            features_position: bottom
+          - type: tile
+            entity: number.deye_inverter_maximum_battery_discharge_current
+            name: Max Discharge Current
+            vertical: false
+            features_position: bottom
+        visibility:
+          - condition: user
+            users:
+              - 7b4fb52ead7b46d58553ee40e8a9225d
+      - type: grid
+        columns: 1
+        cards:
+          - type: entities
+            title: Time of Use (TOU)
+            show_header_toggle: false
+            entities:
+              - entity: switch.deye_inverter_time_of_use
+                name: Увімкнути розклад (Time of Use)
+              - type: custom:multiple-entity-row
+                entity: time.deye_inverter_time_of_use_1_start
+                name: Слот 1
+                state_header: Час
+                entities:
+                  - entity: number.deye_inverter_time_of_use_1_out_power
+                    name: W
+                  - entity: number.deye_inverter_time_of_use_1_soc
+                    name: SoC
+                  - entity: number.deye_inverter_time_of_use_1_voltage
+                    name: V
+                  - entity: switch.deye_inverter_time_of_use_1_charge_enable
+                    name: Мережа
+                    toggle: true
+                  - entity: switch.deye_inverter_time_of_use_1_gen
+                    name: Ген.
+                    toggle: true
+              - type: custom:multiple-entity-row
+                entity: time.deye_inverter_time_of_use_2_start
+                name: Слот 2
+                state_header: Час
+                entities:
+                  - entity: number.deye_inverter_time_of_use_2_out_power
+                    name: W
+                  - entity: number.deye_inverter_time_of_use_2_soc
+                    name: SoC
+                  - entity: number.deye_inverter_time_of_use_2_voltage
+                    name: V
+                  - entity: switch.deye_inverter_time_of_use_2_charge_enable
+                    name: Мережа
+                    toggle: true
+                  - entity: switch.deye_inverter_time_of_use_2_gen
+                    name: Ген.
+                    toggle: true
+              - type: custom:multiple-entity-row
+                entity: time.deye_inverter_time_of_use_3_start
+                name: Слот 3
+                state_header: Час
+                entities:
+                  - entity: number.deye_inverter_time_of_use_3_out_power
+                    name: W
+                  - entity: number.deye_inverter_time_of_use_3_soc
+                    name: SoC
+                  - entity: number.deye_inverter_time_of_use_3_voltage
+                    name: V
+                  - entity: switch.deye_inverter_time_of_use_3_charge_enable
+                    name: Мережа
+                    toggle: true
+                  - entity: switch.deye_inverter_time_of_use_3_gen
+                    name: Ген.
+                    toggle: true
+              - type: custom:multiple-entity-row
+                entity: time.deye_inverter_time_of_use_4_start
+                name: Слот 4
+                state_header: Час
+                entities:
+                  - entity: number.deye_inverter_time_of_use_4_out_power
+                    name: W
+                  - entity: number.deye_inverter_time_of_use_4_soc
+                    name: SoC
+                  - entity: number.deye_inverter_time_of_use_4_voltage
+                    name: V
+                  - entity: switch.deye_inverter_time_of_use_4_charge_enable
+                    name: Мережа
+                    toggle: true
+                  - entity: switch.deye_inverter_time_of_use_4_gen
+                    name: Ген.
+                    toggle: true
+              - type: custom:multiple-entity-row
+                entity: time.deye_inverter_time_of_use_5_start
+                name: Слот 5
+                state_header: Час
+                entities:
+                  - entity: number.deye_inverter_time_of_use_5_out_power
+                    name: W
+                  - entity: number.deye_inverter_time_of_use_5_soc
+                    name: SoC
+                  - entity: number.deye_inverter_time_of_use_5_voltage
+                    name: V
+                  - entity: switch.deye_inverter_time_of_use_5_charge_enable
+                    name: Мережа
+                    toggle: true
+                  - entity: switch.deye_inverter_time_of_use_5_gen
+                    name: Ген.
+                    toggle: true
+              - type: custom:multiple-entity-row
+                entity: time.deye_inverter_time_of_use_6_start
+                name: Слот 6
+                state_header: Час
+                entities:
+                  - entity: number.deye_inverter_time_of_use_6_out_power
+                    name: W
+                  - entity: number.deye_inverter_time_of_use_6_soc
+                    name: SoC
+                  - entity: number.deye_inverter_time_of_use_6_voltage
+                    name: V
+                  - entity: switch.deye_inverter_time_of_use_6_charge_enable
+                    name: Мережа
+                    toggle: true
+                  - entity: switch.deye_inverter_time_of_use_6_gen
+                    name: Ген.
+                    toggle: true
+        visibility:
+          - condition: user
+            users:
+              - 7b4fb52ead7b46d58553ee40e8a9225d
+    visible:
+      - user: 7b4fb52ead7b46d58553ee40e8a9225d
+    cards: []

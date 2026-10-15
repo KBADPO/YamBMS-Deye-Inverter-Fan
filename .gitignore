@@ -1,0 +1,23 @@
+# ESPHome cache and build files
+.esphome/
+.esphome.json
+*.bin
+*.elf
+
+# Sensitive credentials & passwords
+secrets.yaml
+
+# Local working configs with private keys (not pushed to GitHub)
+YamBMS+Deye Invertor.yaml
+YamBMS BLE.yaml
+
+# Local dashboards not included in repo
+Dashboard Overview.yaml
+
+# OS and Editor temporary files
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+.vscode/
+.idea/
